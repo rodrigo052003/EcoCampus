@@ -1,139 +1,103 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import Navbar from "../components/Navbar";
+import { updateMaterial, getMaterials } from "../services/api";
 import "./AddMaterial.css";
 
 export default function EditMaterial() {
-
   const navigate = useNavigate();
-
   const { id } = useParams();
 
-  const [title, setTitle] =
-   useState("Cálculo Vol. 1 - Stewart");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("Livro");
+  const [quality, setQuality] = useState("A");
+  const [transaction, setTransaction] = useState("Troca");
+  const [loading, setLoading] = useState(false);
 
-
-  const [category, setCategory] =
-    useState("Livro"); 
-
-  const [quality, setQuality] =
-    useState("A");
-
-  const [transaction, setTransaction] =
-   useState("Troca");
+  // Carrega os dados atuais do material
+  useEffect(() => {
+    getMaterials().then(data => {
+      const material = data.find(m => m.id === parseInt(id));
+      if (material) {
+        setTitle(material.title || "");
+        setDescription(material.description || "");
+        setCategory(material.category || "Livro");
+        setQuality(material.quality || "A");
+        setTransaction(material.transaction || "Troca");
+      }
+    });
+  }, [id]);
 
   async function handleSave() {
-   
-    console.log("ID:", id);
-
-  const token =
-    localStorage.getItem(
-      "token"
-    );
-    console.log("TOKEN DO LOCALSTORAGE:", token);
-
-  try {
-
-    const response = await fetch(
-  `http://127.0.0.1:5000/materials/${id}`,
-  {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      title,
-      category,
-      quality,
-      transaction
-    })
+    if (!title.trim()) {
+      alert("Preencha o título do material.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const { ok, data } = await updateMaterial(id, {
+        title,
+        description,
+        category,
+        quality,
+        transaction,
+      });
+      if (ok) {
+        alert("Material atualizado!");
+        navigate("/my-materials");
+      } else {
+        alert(data.message || "Erro ao atualizar.");
+      }
+    } catch {
+      alert("Erro ao conectar com o servidor.");
+    } finally {
+      setLoading(false);
+    }
   }
-);
-
-    const data =
-      await response.json();
-
-    console.log(data);
-
-    alert(
-      "Material atualizado!"
-    );
-
-    navigate(
-      "/my-materials"
-    );
-
-    window.location.reload();
-
-  } catch (error) {
-
-    console.error(error);
-
-  }
-
-}
 
   return (
     <>
       <Navbar />
-
       <div className="form-page">
-
         <div className="form-card">
-
           <h1>Editar Material</h1>
 
           <input
             value={title}
-            onChange={(e) =>
-              setTitle(e.target.value)
-            }
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Título"
           />
 
           <textarea
             placeholder="Descrição"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
 
-          <select 
-            value={category}
-            onChange={(e) =>
-             setCategory(e.target.value)
-            }
-          >
+          <select value={category} onChange={(e) => setCategory(e.target.value)}>
             <option>Livro</option>
             <option>Calculadora</option>
             <option>Apostila</option>
+            <option>Outro</option>
           </select>
 
-          <select 
-            value={quality}
-            onChange={(e) =>
-              setQuality(e.target.value)
-            }
-          >
+          <select value={quality} onChange={(e) => setQuality(e.target.value)}>
             <option>A</option>
             <option>B</option>
             <option>C</option>
           </select>
 
-          <select 
-            value={transaction}
-            onChange={(e) =>
-              setTransaction(e.target.value)
-            }
-          >
+          <select value={transaction} onChange={(e) => setTransaction(e.target.value)}>
             <option>Troca</option>
             <option>Empréstimo</option>
             <option>Doação</option>
           </select>
 
-          <button onClick={handleSave}>
-            Salvar Alterações
+          <button onClick={handleSave} disabled={loading}>
+            {loading ? "Salvando..." : "Salvar Alterações"}
           </button>
-
         </div>
-
       </div>
     </>
   );

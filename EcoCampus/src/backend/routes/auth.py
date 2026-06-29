@@ -1,105 +1,75 @@
-from flask import Blueprint
-from flask import request
-from flask import jsonify
+from flask import Blueprint, request, jsonify
+from flask_jwt_extended import create_access_token
 
-from flask_jwt_extended import (
-    create_access_token
-)
+from config import get_db
+from services.security import hash_password, verify_password
 
-from data.users import users
+auth_bp = Blueprint("auth", __name__)
 
-from services.security import (
-    hash_password,
-    verify_password
-)
 
-auth_bp = Blueprint(
-    "auth",
-    __name__
-)
-
-@auth_bp.route(
-    "/login",
-    methods=["POST"]
-)
+@auth_bp.route("/login", methods=["POST"])
 def login():
 
-    data = request.json
+    data     = request.json
+    email    = data.get("email")
+    password = data.get("password")
 
-    email = data["email"]
+    conn   = get_db()
+    cursor = conn.cursor(dictionary=True)
 
-    password = data["password"]
+    cursor.execute(
+        "SELECT * FROM usuarios WHERE email = %s AND ativo = 1",
+        (email,)
+    )
+    user = cursor.fetchone()
 
-    for user in users:
+    cursor.close()
+    conn.close()
 
-        if user["email"] == email:
+    if not user or not verify_password(password, user["senha_hash"]):
+        return jsonify({"message": "Credenciais inválidas"}), 401
 
-            if verify_password(
-                password,
-                user["password"]
-            ):
-
-                token = create_access_token(
-                    identity=str(user["id"])
-                )
-
-                return jsonify({
-
-                    "token": token,
-
-                    "name":
-                    user["name"]
-
-                })
+    token = create_access_token(identity=str(user["id"]))
 
     return jsonify({
+        "token": token,
+        "name":  user["nome"],
+        "id":    user["id"]
+    })
 
-        "message":
-        "Credenciais inválidas"
 
-    }), 401
-
-@auth_bp.route(
-    "/register",
-    methods=["POST"]
-)
+@auth_bp.route("/register", methods=["POST"])
 def register():
 
-    data = request.json
+    data  = request.json
+    nome  = data.get("name")
+    email = data.get("email")
+    senha = data.get("password")
+    tipo  = data.get("role", "Aluno")   # "Aluno" ou "Professor"
 
-    email = data["email"]
+    conn   = get_db()
+    cursor = conn.cursor(dictionary=True)
 
-    for user in users:
+    # Verifica se e-mail já existe
+    cursor.execute(
+        "SELECT id FROM usuarios WHERE email = %s",
+        (email,)
+    )
+    if cursor.fetchone():
+        cursor.close()
+        conn.close()
+        return jsonify({"message": "Email já cadastrado"}), 400
 
-        if user["email"] == email:
+    cursor.execute(
+        """
+        INSERT INTO usuarios (nome, email, senha_hash, tipo)
+        VALUES (%s, %s, %s, %s)
+        """,
+        (nome, email, hash_password(senha), tipo)
+    )
+    conn.commit()
 
-            return jsonify({
-                "message":
-                "Email já cadastrado"
-            }), 400
+    cursor.close()
+    conn.close()
 
-    new_user = {
-
-        "id": len(users) + 1,
-
-        "name": data["name"],
-
-        "email": email,
-
-        "password": hash_password(
-            data["password"]
-        ),
-
-        "role": "student",
-
-        "reputation": 0
-    }
-
-    users.append(new_user)
-
-    print(users)
-
-    return jsonify({
-        "message":
-        "Usuário criado"
-    }), 201
+    return jsonify({"message": "Usuário criado"}), 201

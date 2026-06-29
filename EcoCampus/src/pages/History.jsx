@@ -1,61 +1,46 @@
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import "./History.css";
 
+const BASE_URL = "http://127.0.0.1:5000";
+
 export default function History() {
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const history = [
-
-    {
-      type: "Troca",
-      material: "Livro de Álgebra",
-      date: "05/06/2026"
-    },
-
-    {
-      type: "Doação",
-      material: "Livro de Física",
-      date: "03/06/2026"
-    },
-
-    {
-      type: "Empréstimo",
-      material: "Calculadora Casio",
-      date: "01/06/2026"
-    }
-
-  ];
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    fetch(`${BASE_URL}/history`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => res.json())
+      .then(data => setHistory(Array.isArray(data) ? data : []))
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <>
       <Navbar />
-
       <div className="history-page">
-
         <h1>Histórico</h1>
 
-        {history.map((item, index) => (
-
-          <div
-            key={index}
-            className="history-item"
-          >
-
-            <h3>
-              {item.type}
-            </h3>
-
-            <p>
-              {item.material}
-            </p>
-
-            <small>
-              {item.date}
-            </small>
-
-          </div>
-
-        ))}
-
+        {loading ? (
+          <p>Carregando...</p>
+        ) : history.length === 0 ? (
+          <p>Nenhuma transação encontrada.</p>
+        ) : (
+          history.map((item, index) => (
+            <div key={item.id || index} className="history-item">
+              <h3>{item.type || item.tipo}</h3>
+              <p>{item.material || item.titulo}</p>
+              <small>{item.data_transacao
+                ? new Date(item.data_transacao).toLocaleDateString("pt-BR")
+                : item.date}
+              </small>
+            </div>
+          ))
+        )}
       </div>
     </>
   );

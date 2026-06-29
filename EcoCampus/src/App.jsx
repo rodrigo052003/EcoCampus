@@ -14,12 +14,15 @@ import History from "./pages/History";
 import Reputation from "./pages/Reputation";
 import About from "./pages/About";
 import Help from "./pages/Help";
+import Gamification from "./pages/Gamification";
 
 function App() {
   return (
     <BrowserRouter>
 
       <Routes>
+
+        <Route path="/gamification" element={<Gamification />} />
 
         <Route path="/" element={<AuthPage />} />
 

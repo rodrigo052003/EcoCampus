@@ -1,0 +1,206 @@
+.gamification-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.gamification-page h1 {
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+/* Card de nível */
+.nivel-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  border-left: 6px solid;
+}
+
+.nivel-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.nivel-badge-big { font-size: 3.5rem; }
+
+.nivel-header h2 { margin: 0 0 4px; font-size: 1.5rem; }
+.nivel-header p  { margin: 0 0 6px; color: #64748b; }
+
+.pontos-total {
+  background: #dbeafe;
+  color: #2563eb;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: .9rem;
+}
+
+.progress-section { margin-top: .5rem; }
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: .85rem;
+  color: #64748b;
+  margin-bottom: .4rem;
+}
+
+.progress-bar {
+  background: #e2e8f0;
+  border-radius: 20px;
+  height: 12px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 20px;
+  transition: width .5s ease;
+}
+
+.progress-percent {
+  font-size: .8rem;
+  color: #94a3b8;
+  display: block;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.max-nivel {
+  color: #f59e0b;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Estatísticas */
+.stats-card, .conquistas-card, .recompensas-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+}
+
+.stats-card h2, .conquistas-card h2, .recompensas-card h2 {
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1rem;
+  gap: 4px;
+}
+
+.stat-icon  { font-size: 1.8rem; }
+.stat-value { font-size: 1.6rem; font-weight: bold; color: #1e293b; }
+.stat-label { font-size: .8rem; color: #94a3b8; }
+
+/* Conquistas */
+.conquistas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+}
+
+.conquista-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .8rem 1rem;
+  border-radius: 12px;
+  transition: all .2s;
+}
+
+.conquista-item.desbloqueada {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.conquista-item.bloqueada {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  opacity: .6;
+}
+
+.conquista-icone { font-size: 1.8rem; }
+
+.conquista-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.conquista-info strong { color: #1e293b; }
+.conquista-info small  { color: #94a3b8; font-size: .8rem; }
+
+.conquista-pontos {
+  color: #2563eb;
+  font-size: .8rem;
+  font-weight: bold;
+}
+
+.conquista-status { font-size: 1.2rem; }
+
+/* Recompensas */
+.recompensas-list {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+}
+
+.recompensa-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .8rem 1rem;
+  border-radius: 12px;
+}
+
+.recompensa-item.desbloqueada {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
+
+.recompensa-item.bloqueada {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  opacity: .6;
+}
+
+.recompensa-badge { font-size: 2rem; }
+
+.recompensa-info {
+  flex: 1;
+}
+
+.recompensa-info strong { display: block; font-size: 1rem; }
+.recompensa-info p { margin: 2px 0 0; color: #64748b; font-size: .9rem; }
+
+.check { color: #16a34a; font-size: .85rem; font-weight: bold; white-space: nowrap; }
+.lock  { color: #94a3b8; font-size: .85rem; white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .nivel-header { flex-wrap: wrap; }
+}
