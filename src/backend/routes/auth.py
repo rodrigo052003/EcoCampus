@@ -70,7 +70,6 @@ def forgot_password():
     cursor.close()
     conn.close()
 
-    # Não revela se o e-mail existe ou não
     if not user:
         return jsonify({"message": "Se o e-mail existir, você receberá as instruções em breve."})
 
@@ -80,7 +79,8 @@ def forgot_password():
         additional_claims={"type": RESET_TOKEN_TYPE},
     )
 
-    # Monta e envia o e-mail
+    link = f"http://localhost:5173/reset-password/{reset_token}"
+
     mail = Mail(current_app)
     msg  = Message(
         subject="EcoCampus — Redefinição de senha",
@@ -92,15 +92,14 @@ def forgot_password():
       <h2 style="color:#2563eb;margin-bottom:8px">🌱 EcoCampus</h2>
       <h3 style="margin-bottom:16px">Redefinição de senha</h3>
       <p>Olá, <strong>{user['nome']}</strong>!</p>
-      <p>Recebemos um pedido para redefinir a senha da sua conta.
-         Use o código abaixo na tela de redefinição de senha:</p>
-      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;
-                  padding:16px;margin:24px 0;word-break:break-all;font-size:13px;
-                  color:#334155">
-        {reset_token}
-      </div>
+      <p>Clique no botão abaixo para redefinir sua senha:</p>
+      <a href="{link}" style="display:inline-block;margin:24px 0;background:#2563eb;
+         color:white;padding:14px 28px;border-radius:10px;text-decoration:none;
+         font-weight:bold">
+        Redefinir minha senha
+      </a>
       <p style="color:#64748b;font-size:13px">
-        Este código expira em <strong>30 minutos</strong>.<br>
+        Este link expira em <strong>30 minutos</strong>.<br>
         Se você não solicitou a redefinição, ignore este e-mail.
       </p>
     </div>

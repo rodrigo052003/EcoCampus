@@ -16,6 +16,7 @@ import Reputation from "./pages/Reputation";
 import About from "./pages/About";
 import Help from "./pages/Help";
 import Gamification from "./pages/Gamification";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
         <Route path="/gamification" element={<Gamification />} />
 
         <Route path="/" element={<AuthPage />} />
+
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         <Route
           path="/dashboard"
