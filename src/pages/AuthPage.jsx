@@ -185,21 +185,14 @@ function ForgotPasswordFlow({ onBack }) {
     }
   }
 
-  async function handleResetPassword(e) {
+  async function handleRequestReset(e) {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      setInfo({ type: "error", text: "As senhas não coincidem." });
-      return;
-    }
     setLoading(true);
     setInfo(null);
     try {
-      const { ok, data } = await resetPassword(resetToken, password);
-      if (ok) {
-        setStep("done");
-      } else {
-        setInfo({ type: "error", text: data.message || "Não foi possível redefinir a senha." });
-      }
+      const { data } = await forgotPassword(email);
+      setInfo({ type: "success", text: data.message });
+      setStep("reset");
     } catch {
       setInfo({ type: "error", text: "Erro ao conectar com o servidor." });
     } finally {
