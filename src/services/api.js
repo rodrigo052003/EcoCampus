@@ -1,7 +1,8 @@
-// ============================================================
+
 //  EcoCampus — Serviço de API
 //  Centraliza todas as chamadas ao backend Flask.
-// ============================================================
+//  Eu(Rodrigo) e Carlos fizemos
+
 
 const BASE_URL = "http://127.0.0.1:5000";
 
@@ -14,7 +15,6 @@ function getHeaders(auth = false) {
   return headers;
 }
 
-// ---------- Auth ----------
 
 export async function login(email, password) {
   const res = await fetch(`${BASE_URL}/login`, {
@@ -52,7 +52,6 @@ export async function resetPassword(reset_token, password) {
   return { ok: res.ok, data: await res.json() };
 }
 
-// ---------- Profile ----------
 
 export async function getProfile() {
   const res = await fetch(`${BASE_URL}/profile`, {
@@ -70,7 +69,6 @@ export async function updateProfile(payload) {
   return { ok: res.ok, data: await res.json() };
 }
 
-// ---------- Materials ----------
 
 export async function getMaterials() {
   const res = await fetch(`${BASE_URL}/materials`);
@@ -110,8 +108,6 @@ export async function deleteMaterial(id) {
   return { ok: res.ok };
 }
 
-// ---------- Requests ----------
-
 export async function getMyRequests() {
   const res = await fetch(`${BASE_URL}/requests`, {
     headers: getHeaders(true),
@@ -143,8 +139,6 @@ export async function updateRequestStatus(id, status) {
   });
   return { ok: res.ok, data: await res.json() };
 }
-
-// ---------- Notifications ----------
 
 export async function getNotifications() {
   const res = await fetch(`${BASE_URL}/notifications`, {
