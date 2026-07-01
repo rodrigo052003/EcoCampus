@@ -1,16 +1,37 @@
-# React + Vite
+ EcoCampus
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plataforma de compartilhamento de materiais acadêmicos entre estudantes universitários. Doe, troque ou empreste livros, apostilas e materiais de estudo com outros alunos da sua universidade.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+ Funcionalidades
 
-## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+📚 Marketplace — explore materiais disponíveis para doação, troca ou empréstimo
+➕ Cadastro de materiais — publique seus próprios materiais com foto, descrição e tipo de transação
+🔄 Solicitações — envie e receba pedidos de troca ou empréstimo
+🏆 Gamificação — ganhe pontos de reputação e suba de nível conforme participa
+👤 Perfil — edite suas informações, universidade e curso
+🌙 Modo escuro/claro — alternância de tema com persistência
+🔐 Autenticação — login, cadastro e recuperação de senha
+📱 Responsivo — funciona em celular, tablet e desktop
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+ Tecnologias
+
+Frontend
+
+
+React 19
+React Router DOM 7
+Vite 8
+CSS puro com variáveis de tema
+
+
+Backend
+
+
+Python / Flask
+Flask-JWT-Extended
+MySQL
+Flask-CORS
